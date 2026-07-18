@@ -1,9 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { Search, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { searchMovies } from "../../services/movieService";
-
 import type { Movie } from "../../types/Movie";
 
 
@@ -15,6 +15,8 @@ const SearchBar = () => {
     const [results, setResults] = useState<Movie[]>([]);
 
     const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
 
 
@@ -42,28 +44,30 @@ const SearchBar = () => {
                 const data = await searchMovies(query);
 
 
-                setResults(
-                    data.slice(0,5)
-                );
+                setResults(data.slice(0,5));
 
 
-            } 
+            }
             catch(error){
+
 
                 console.log(
                     "Search error:",
                     error
                 );
 
+
                 setResults([]);
+
 
             }
             finally{
 
+
                 setLoading(false);
 
-            }
 
+            }
 
 
         },500);
@@ -71,7 +75,6 @@ const SearchBar = () => {
 
 
         return () => clearTimeout(timer);
-
 
 
     },[query]);
@@ -82,9 +85,11 @@ const SearchBar = () => {
 
     const clearSearch = () => {
 
+
         setQuery("");
 
         setResults([]);
+
 
     };
 
@@ -94,11 +99,7 @@ const SearchBar = () => {
 
     return (
 
-        <div className="
-            relative
-            w-full
-            max-w-md
-        ">
+        <div className="relative w-full max-w-md">
 
 
             <div className="
@@ -120,20 +121,15 @@ const SearchBar = () => {
                 />
 
 
-
                 <input
 
-
                     value={query}
-
 
                     onChange={(e)=>
                         setQuery(e.target.value)
                     }
 
-
                     placeholder="Search movies..."
-
 
                     className="
                     bg-transparent
@@ -144,7 +140,6 @@ const SearchBar = () => {
                     placeholder-gray-400
                     "
 
-
                 />
 
 
@@ -152,9 +147,7 @@ const SearchBar = () => {
                 {
                     query.length > 0 && (
 
-                        <button
-                            onClick={clearSearch}
-                        >
+                        <button onClick={clearSearch}>
 
                             <X
                                 size={20}
@@ -167,7 +160,6 @@ const SearchBar = () => {
                 }
 
 
-
             </div>
 
 
@@ -178,37 +170,28 @@ const SearchBar = () => {
 
 
             {
-
                 results.length > 0 && (
 
-
                     <motion.div
-
 
                         initial={{
                             opacity:0,
                             y:-20
                         }}
 
-
                         animate={{
                             opacity:1,
                             y:0
                         }}
-
 
                         exit={{
                             opacity:0,
                             y:-20
                         }}
 
-
-
                         transition={{
                             duration:0.3
                         }}
-
-
 
                         className="
                         absolute
@@ -224,9 +207,7 @@ const SearchBar = () => {
                         z-50
                         "
 
-
                     >
-
 
 
                     {
@@ -235,14 +216,11 @@ const SearchBar = () => {
 
                             <motion.div
 
-
                                 key={movie.id}
 
-
-                                whileHover={{
-                                    scale:1.02
-                                }}
-
+                                onClick={() =>
+                                    navigate(`/movie/${movie.id}`)
+                                }
 
                                 className="
                                 flex
@@ -254,13 +232,10 @@ const SearchBar = () => {
                                 transition
                                 "
 
-
                             >
 
 
-
                                 <img
-
 
                                     src={
                                         movie.poster_path
@@ -270,9 +245,7 @@ const SearchBar = () => {
                                         "/no-image.png"
                                     }
 
-
                                     alt={movie.title}
-
 
                                     className="
                                     w-12
@@ -280,7 +253,6 @@ const SearchBar = () => {
                                     object-cover
                                     rounded
                                     "
-
 
                                 />
 
@@ -290,23 +262,16 @@ const SearchBar = () => {
 
 
                                     <h3 className="font-semibold">
-
-
                                         {movie.title}
-
-
                                     </h3>
 
 
 
                                     <p className="text-sm text-gray-400">
 
-
                                         ⭐ {movie.vote_average.toFixed(1)}
 
-
                                     </p>
-
 
 
                                 </div>
@@ -320,13 +285,9 @@ const SearchBar = () => {
                     }
 
 
-
                     </motion.div>
 
-
                 )
-
-
             }
 
 
@@ -335,16 +296,17 @@ const SearchBar = () => {
 
 
 
+
             {
                 loading && (
 
                     <div className="
-                        absolute
-                        top-16
-                        text-white
-                        bg-black/80
-                        p-3
-                        rounded-xl
+                    absolute
+                    top-16
+                    text-white
+                    bg-black/80
+                    p-3
+                    rounded-xl
                     ">
 
                         Searching...
@@ -356,11 +318,10 @@ const SearchBar = () => {
 
 
 
+
         </div>
 
-
     );
-
 
 };
 

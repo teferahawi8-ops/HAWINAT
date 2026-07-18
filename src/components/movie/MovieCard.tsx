@@ -1,26 +1,51 @@
 import { Heart, Star } from "lucide-react";
 import type { Movie } from "../../types/Movie";
+import { useFavorites } from "../../context/FavoriteContext";
+
 
 interface MovieCardProps {
   movie: Movie;
 }
 
+
 const MovieCard = ({ movie }: MovieCardProps) => {
+
+
+  const {
+    addFavorite,
+    removeFavorite,
+    isFavorite
+  } = useFavorites();
+
+
+
+  const favorite = isFavorite(movie.id);
+
+
+
+  const handleFavorite = () => {
+
+    if (favorite) {
+
+      removeFavorite(movie.id);
+
+    } else {
+
+      addFavorite(movie);
+
+    }
+
+  };
+
+
+
   return (
-    <div
-      className="
-        group
-        relative
-        overflow-hidden
-        rounded-2xl
-        bg-gray-900
-        shadow-lg
-        transition-transform
-        duration-500
-        hover:scale-105
-      "
-    >
+
+    <div className="relative group rounded-xl overflow-hidden bg-black">
+
+
       {/* Movie Poster */}
+
       <img
         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
         alt={movie.title}
@@ -34,7 +59,10 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         "
       />
 
+
+
       {/* Gradient Overlay */}
+
       <div
         className="
           absolute
@@ -46,7 +74,10 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         "
       />
 
+
+
       {/* Rating */}
+
       <div
         className="
           absolute
@@ -62,40 +93,71 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           rounded-full
         "
       >
+
         <Star
           size={16}
           className="text-yellow-400"
           fill="currentColor"
         />
 
+
         <span className="text-white text-sm font-semibold">
           {movie.vote_average.toFixed(1)}
         </span>
+
       </div>
 
+
+
+
       {/* Favorite Button */}
+
       <button
+
+        onClick={handleFavorite}
+
         className="
           absolute
           top-3
           left-3
           opacity-0
           group-hover:opacity-100
-          transition-opacity
+          transition-all
           duration-300
           bg-black/60
           p-3
           rounded-full
+          hover:scale-110
         "
+
       >
+
         <Heart
+
           size={22}
-          className="text-red-500"
-          fill="currentColor"
+
+          className={
+            favorite
+              ? "text-red-500"
+              : "text-white"
+          }
+
+          fill={
+            favorite
+              ? "currentColor"
+              : "none"
+          }
+
         />
+
       </button>
 
+
+
+
+
       {/* Movie Information */}
+
       <div
         className="
           absolute
@@ -106,16 +168,26 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           text-white
         "
       >
+
         <h3 className="text-xl font-bold truncate">
           {movie.title}
         </h3>
 
+
         <p className="text-gray-300 text-sm mt-1">
-          {movie.release_date?.slice(0, 4)}
+          {movie.release_date?.slice(0,4)}
         </p>
+
+
       </div>
+
+
+
     </div>
+
   );
+
 };
+
 
 export default MovieCard;

@@ -9,6 +9,7 @@ interface MovieSectionProps {
 const MovieSection = ({ title, movies }: MovieSectionProps) => {
   return (
     <section className="mb-12">
+
       <h2 className="text-white text-3xl font-bold mb-6">
         {title}
       </h2>
@@ -30,6 +31,7 @@ const MovieSection = ({ title, movies }: MovieSectionProps) => {
           />
         ))}
       </div>
+
     </section>
   );
 };
